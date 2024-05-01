@@ -1,1 +1,3 @@
-# SQL-Exercises-LeetCode
+# Описание репозитория :book:
+*Здесь будут собраны решения задач по SQL с сайта LeetCode* :books:  
+
