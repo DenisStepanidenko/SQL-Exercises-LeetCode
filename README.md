@@ -179,6 +179,35 @@ from prices p
 left join unitsSold u on p.product_id = u.product_id and (u.purchase_date >= p.start_date and u.purchase_date <= p.end_date)
 group by p.product_id
 ```  
+ 
+# [*1075. Project Employees I*](https://leetcode.com/problems/project-employees-i/description/?envType=study-plan-v2&envId=top-sql-50) :white_check_mark: 
+```sql
+select project.project_id,
+       round(avg(experience_years)::numeric,2) average_years
+from project
+left join employee on employee.employee_id = project.employee_id
+group by project.project_id
+```
+
+# [*1633. Percentage of Users Attended a Contest*](https://leetcode.com/problems/percentage-of-users-attended-a-contest/?envType=study-plan-v2&envId=top-sql-50) :white_check_mark: 
+```sql
+select register.contest_id,
+       round((select count(register.user_id) * 100 :: numeric / (select count(user_id)
+ from users) :: numeric) , 2) percentage
+from register
+group by register.contest_id
+order by percentage desc, register.contest_id
+```
+
+# [*1211. Queries Quality and Percentage*](https://leetcode.com/problems/queries-quality-and-percentage/description/?envType=study-plan-v2&envId=top-sql-50) :white_check_mark: 
+```sql
+select q.query_name,
+       round(sum(q.rating / q.position :: numeric) / count(rating) , 2) quality,
+       round(  ( (select count(*) from queries q1 where q1.rating < 3 and q1.query_name = q.query_name) * 100 / count(rating) ::numeric ) , 2) poor_query_percentage
+from queries q
+where q.query_name IS NOT NULL
+group by q.query_name
+```
 
 
 
