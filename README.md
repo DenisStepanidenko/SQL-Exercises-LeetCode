@@ -160,6 +160,27 @@ from confirmations c2
 group by c2.user_id)
 ```
 
+# [*620. Not Boring Movies*](https://leetcode.com/problems/not-boring-movies/description/) :white_check_mark:
+```sql
+select id,
+       movie,
+       description,
+       rating
+from cinema
+where (cinema.id % 2 = 1 and cinema.description != 'boring') 
+order by rating desc
+```
+
+# [*1251. Average Selling Price*](https://leetcode.com/problems/average-selling-price/description/) :white_check_mark:  
+```sql
+select p.product_id,
+       COALESCE(round((sum(p.price * u.units)::numeric / sum(units)::numeric )::numeric , 2) , 0) average_price
+from prices p
+left join unitsSold u on p.product_id = u.product_id and (u.purchase_date >= p.start_date and u.purchase_date <= p.end_date)
+group by p.product_id
+```  
+
+
 
 
 
