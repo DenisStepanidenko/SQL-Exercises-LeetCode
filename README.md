@@ -208,8 +208,55 @@ from queries q
 where q.query_name IS NOT NULL
 group by q.query_name
 ```
+# [*1193. Monthly Transactions I*](https://leetcode.com/problems/monthly-transactions-i/description/) :white_check_mark:
+```sql
+select a.month,
+       a.country,
+       trans_count,
+       COALESCE(approved_count,0) as approved_count,
+       trans_total_amount,
+       COALESCE(approved_total_amount,0) as approved_total_amount
+from (select to_char(date_trunc('month', trans_date), 'YYYY-MM') AS month,
+        country,
+        count(*) as trans_count,
+        sum(amount) as trans_total_amount
+       
+from transactions
+group by month,country) a
+left join (select to_char(date_trunc('month', trans_date), 'YYYY-MM') AS month,
+        country,
+       sum(amount) as approved_total_amount,
+       count(state) as approved_count
+from transactions
+where state = 'approved'
+group by month,country) b
 
+on (a.month = b.month and (a.country = b.country OR (a.country is null and b.country is null)))
+```
 
+# [*1174. Immediate Food Delivery II*](https://leetcode.com/problems/immediate-food-delivery-ii/description/) :white_check_mark:
+```sql
+select round((select count(*)
+from (select customer_id,
+       min(order_date) as min_date
+from Delivery
+group by customer_id) help
+left join Delivery d
+on d.customer_pref_delivery_date = help.min_date and help.customer_id = d.customer_id
+where delivery_id is not null) * 100 ::numeric / (select count(distinct customer_id)
+from Delivery)::numeric , 2) as immediate_percentage
+```
+
+# [*550. Game Play Analysis IV*](https://leetcode.com/problems/game-play-analysis-iv/description/) :white_check_mark:
+```sql
+select round((select count(*)
+from (select player_id,
+       min(event_date) first_date
+from Activity
+group by player_id) help
+left join Activity a on (help.player_id = a.player_id and help.first_date  + interval '1 day' = a.event_date)
+where a.player_id is not null)::numeric / (select count(distinct player_id) from Activity) ::numeric , 2) as fraction
+```
 
 
 
