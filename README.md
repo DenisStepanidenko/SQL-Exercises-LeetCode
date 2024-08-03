@@ -258,6 +258,25 @@ left join Activity a on (help.player_id = a.player_id and help.first_date  + int
 where a.player_id is not null)::numeric / (select count(distinct player_id) from Activity) ::numeric , 2) as fraction
 ```
 
+# [*2356. Number of Unique Subjects Taught by Each Teacher*](https://leetcode.com/problems/number-of-unique-subjects-taught-by-each-teacher/?envType=study-plan-v2&envId=top-sql-50)
+```sql
+select teacher_id,
+        count(distinct subject_id) as cnt
+from teacher
+group by teacher_id
+```
+
+# [*1141. User Activity for the Past 30 Days I*](https://leetcode.com/problems/user-activity-for-the-past-30-days-i/?envType=study-plan-v2&envId=top-sql-50)
+```sql
+select day,
+       active_users
+from (select activity_date as day,
+        count(distinct user_id) as active_users
+from activity
+group by activity_date)
+where active_users > 0 and (day > ('2019-07-27'::date - interval '30 days') ) and (day <= '2019-07-27')
+```
+
 
 
 
